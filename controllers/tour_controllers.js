@@ -251,7 +251,7 @@ export const checkBookingAbilityByTourIdAndUserId = async (req, res) => {
     const bookings = await BookingModel.find({
       userId: userId,
     });
-    consolw.log("Here");
+    console.log("Here");
     var isAbleToBook = true;
     for (let i = 0; i < bookings.length; i++) {
       var t = await TourModel.findById(bookings[i].tourId);
