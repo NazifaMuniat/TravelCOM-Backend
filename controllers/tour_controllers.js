@@ -249,26 +249,26 @@ export const checkBookingAbilityByTourIdAndUserId = async (req, res) => {
   try {
     const tour = await TourModel.findById(tourId);
     const bookings = await BookingModel.find({
-      userId: userId,
+        userId: userId,
     });
-    console.log("Here");
     var isAbleToBook = true;
     for (let i = 0; i < bookings.length; i++) {
-      var t = await TourModel.findById(bookings[i].tourId);
-      if (
-        (t.isCompleted === false &&
-          t.endDate > tour.startDate &&
-          t.startDate < tour.startDate) ||
-        (t.isCompleted === false && t.endDate > tour.endDate && t.startDate < tour.endDate)
-      ) {
-        consolw.log("Here");
-        isAbleToBook = false;
-        break;
-      }
+        var t = await TourModel.findById(bookings[i].tourId);
+        if (
+            (t.isCompleted === false &&
+                t.endDate > tour.startDate &&
+                t.startDate < tour.startDate) ||
+            (t.isCompleted === false &&
+                t.endDate > tour.endDate &&
+                t.startDate < tour.endDate)
+        ) {
+            isAbleToBook = false;
+            break;
+        }
     }
     res.status(200).json({
-      status: "success",
-      data: isAbleToBook,
+        status: "success",
+        data: isAbleToBook,
     });
   } catch (err) {
     res.status(404).json({
