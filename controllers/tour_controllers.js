@@ -104,6 +104,7 @@ export const createTour = async (req, res) => {
     name: req.body.name,
     description: req.body.description,
     location: req.body.location,
+    spots: req.body.spots,
     image: req.body.image,
     startDate: Date.parse(req.body.startDate),
     endDate: req.body.endDate,
@@ -126,6 +127,7 @@ export const updateTour = async (req, res) => {
       name: req.body.name,
       description: req.body.description,
       location: req.body.location,
+      spots: req.body.spots,
       image: req.body.image,
       startDate: req.body.startDate,
       endDate: req.body.endDate,
@@ -163,11 +165,13 @@ export const deleteTour = async (req, res) => {
 };
 
 export const bookingTour = async (req, res) => {
-  const { tourId, userId, paymentMethod, phone, transactionID } = req.body;
+  const { tourId, userId, person, paymentMethod, phone, transactionID } = req.body;
+  console.log(req.body);
   const booking = new BookingModel({
     id: new mongoose.Types.ObjectId(),
     userId: userId,
     tourId: tourId,
+    person: person,
     paymentMethod: paymentMethod,
     phone: phone,
     transactionId: transactionID,
@@ -309,7 +313,9 @@ export const getBookedToursByUserId = async (req, res) => {
     var tours = [];
     for (let i = 0; i < bookings.length; i++) {
       var tour = await TourModel.findById(bookings[i].tourId);
-      tours.push(tour);
+      if (tour.isCompleted === false) {
+        tours.push(tour);
+      }
     }
     res.status(200).json({
       status: "success",
